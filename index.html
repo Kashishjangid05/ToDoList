@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMaster - To-Do List Application</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="light-mode">
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <h1><i class="fas fa-check-circle"></i> TaskMaster</h1>
+            </div>
+            <div class="theme-toggle">
+                <button id="theme-toggle-btn">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark Mode</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="auth-container" id="auth-container">
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            <div class="auth-form-container">
+                <form id="login-form" class="auth-form active">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="register-name">Name</label>
+                        <input type="text" id="register-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">Confirm Password</label>
+                        <input type="password" id="register-confirm-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="app-container hidden" id="app-container">
+            <div class="sidebar">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-name" id="user-name">User Name</div>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li class="active"><a href="#" data-filter="all"><i class="fas fa-list"></i> All Tasks</a></li>
+                        <li><a href="#" data-filter="pending"><i class="fas fa-clock"></i> Pending</a></li>
+                        <li><a href="#" data-filter="completed"><i class="fas fa-check"></i> Completed</a></li>
+                    </ul>
+                </nav>
+                <div class="categories">
+                    <h3>Categories</h3>
+                    <ul id="category-list">
+                        <li><a href="#" data-category="work"><i class="fas fa-briefcase"></i> Work</a></li>
+                        <li><a href="#" data-category="personal"><i class="fas fa-user"></i> Personal</a></li>
+                        <li><a href="#" data-category="urgent"><i class="fas fa-exclamation-circle"></i> Urgent</a></li>
+                        <li><a href="#" data-category="add"><i class="fas fa-plus"></i> Add Category</a></li>
+                    </ul>
+                </div>
+                <div class="logout-container">
+                    <button id="logout-btn" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <main class="main-content">
+                <div class="search-sort-container">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Search tasks...">
+                        <button id="search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="sort-container">
+                        <label for="sort-select">Sort by:</label>
+                        <select id="sort-select">
+                            <option value="priority">Priority</option>
+                            <option value="dueDate">Due Date</option>
+                            <option value="creationTime">Creation Time</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="task-container">
+                    <div class="task-header">
+                        <h2>My Tasks</h2>
+                        <button id="add-task-btn" class="btn btn-primary"><i class="fas fa-plus"></i> Add Task</button>
+                    </div>
+                    <div class="tasks-list" id="tasks-list">
+                        <!-- Tasks will be dynamically added here -->
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Add/Edit Task Modal -->
+        <div class="modal" id="task-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modal-title">Add New Task</h2>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="task-form">
+                        <input type="hidden" id="task-id">
+                        <div class="form-group">
+                            <label for="task-title">Title</label>
+                            <input type="text" id="task-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-description">Description</label>
+                            <textarea id="task-description" rows="3"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="task-due-date">Due Date</label>
+                                <input type="date" id="task-due-date">
+                            </div>
+                            <div class="form-group">
+                                <label for="task-priority">Priority</label>
+                                <select id="task-priority">
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-category">Category</label>
+                            <select id="task-category">
+                                <option value="work">Work</option>
+                                <option value="personal">Personal</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" id="cancel-task-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div class="modal" id="confirm-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Confirm Action</h2>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <p id="confirm-message">Are you sure you want to delete this task?</p>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="cancel-confirm-btn">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirm-action-btn">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Category Modal -->
+        <div class="modal" id="category-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New Category</h2>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="category-form">
+                        <div class="form-group">
+                            <label for="category-name">Category Name</label>
+                            <input type="text" id="category-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category-icon">Icon</label>
+                            <select id="category-icon">
+                                <option value="fas fa-home">Home</option>
+                                <option value="fas fa-briefcase">Work</option>
+                                <option value="fas fa-user">Personal</option>
+                                <option value="fas fa-book">Study</option>
+                                <option value="fas fa-shopping-cart">Shopping</option>
+                                <option value="fas fa-plane">Travel</option>
+                                <option value="fas fa-heart">Health</option>
+                                <option value="fas fa-gamepad">Entertainment</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" id="cancel-category-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add Category</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Template (Hidden) -->
+    <template id="task-template">
+        <div class="task-item" data-id="">
+            <div class="task-checkbox">
+                <input type="checkbox" class="task-complete-checkbox">
+            </div>
+            <div class="task-content">
+                <div class="task-header">
+                    <h3 class="task-title"></h3>
+                    <div class="task-priority"></div>
+                </div>
+                <div class="task-description"></div>
+                <div class="task-meta">
+                    <span class="task-category"></span>
+                    <span class="task-due-date"></span>
+                </div>
+            </div>
+            <div class="task-actions">
+                <button class="task-edit-btn"><i class="fas fa-edit"></i></button>
+                <button class="task-delete-btn"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+    </template>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
